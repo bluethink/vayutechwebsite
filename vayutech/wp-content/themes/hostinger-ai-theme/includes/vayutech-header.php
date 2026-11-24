@@ -7,7 +7,15 @@ add_action( 'wp_enqueue_scripts', function () {
     wp_register_style( 'vayutech-header', false, array(), filemtime( $file ) );
     wp_enqueue_style( 'vayutech-header' );
     wp_add_inline_style( 'vayutech-header', file_get_contents( $file ) );
+    if ( is_front_page() ) {
+        wp_enqueue_script( 'vayutech-banner', wp_make_link_relative( get_template_directory_uri() . '/assets/js/vayutech-banner.js' ), array(), filemtime( get_template_directory() . '/assets/js/vayutech-banner.js' ), true );
+    }
 }, 30 );
+
+// WordPress prefixes relative script URLs with its configured site domain.
+add_filter( 'script_loader_src', static function ( $src, $handle ) {
+    return $handle === 'vayutech-banner' ? wp_make_link_relative( $src ) : $src;
+}, 99, 2 );
 
 // Use the brand favicon on public pages without changing WordPress settings.
 add_action( 'wp_head', function () {
@@ -64,8 +72,32 @@ add_filter( 'the_content', function ( $content ) {
             }
         }
         $content = $tags->get_updated_html();
-        // Replace only the homepage statistics strip; keep stored page content intact.
+        // Update homepage sections at render time; keep stored page content intact.
         if ( is_front_page() && is_main_query() && in_the_loop() ) {
+            $content = preg_replace_callback( '~<section\b[^>]*>(?:(?!</section>).)*</section>~is', static function ( $match ) {
+                if ( strpos( $match[0], '<h1' ) === false || strpos( $match[0], 'Empowering connectivity.' ) === false ) {
+                    return $match[0];
+                }
+                $base = wp_make_link_relative( get_template_directory_uri() . '/assets/images/' );
+                $slides = array(
+                    array( 'fiber', 'Optical Fiber & Networking', 'Connecting businesses.<br>Powering possibilities.', 'Optical fiber networks, FTTx solutions, and dependable networking products for enterprises, ISPs, and growing communities.' ),
+                    array( 'wireless', 'Wireless & Telecom Infrastructure', 'Stronger networks.<br>Wider possibilities.', 'Wireless backhaul, last-mile connectivity, and telecom infrastructure — from site surveys to installation and ongoing support.' ),
+                    array( 'integration', 'System Integration & Security', 'Connected systems.<br>Confident operations.', 'Bring your network, infrastructure, and surveillance together with practical integration and round-the-clock service.' ),
+                    array( 'software-ai', 'Software, ERP & AI Automation', 'Smarter software.<br>Intelligent automation.', 'Custom software and ERP development, Agentic AI, and RAG-based automation — connecting your business knowledge with workflows that work for you.' ),
+                );
+                $html = '<section class="vts-banner" aria-label="VayuTech solutions" aria-roledescription="carousel"><div class="vts-banner__slides" aria-live="off">';
+                foreach ( $slides as $index => $slide ) {
+                    $heading = $index === 0 ? 'h1' : 'h2';
+                    $html .= '<div class="vts-banner__slide" id="vts-banner-slide-' . $index . '" role="group" aria-roledescription="slide" aria-label="' . ( $index + 1 ) . ' of ' . count( $slides ) . '"' . ( $index ? ' hidden' : '' ) . '>';
+                    $html .= '<img class="vts-banner__image" src="' . esc_url( $base . 'vayutech-banner-' . $slide[0] . '.png' ) . '" alt="" width="1672" height="941" decoding="async"' . ( $index === 0 ? ' fetchpriority="high"' : ' loading="lazy"' ) . '>';
+                    $html .= '<div class="vts-banner__content"><p class="vts-banner__eyebrow">' . esc_html( $slide[1] ) . '</p><' . $heading . ' class="vts-banner__title">' . $slide[2] . '</' . $heading . '><p class="vts-banner__description">' . esc_html( $slide[3] ) . '</p><div class="vts-banner__actions"><a class="vts-banner__primary" href="#section-contact">Contact us</a><a class="vts-banner__secondary" href="#section-services">Explore services</a></div></div></div>';
+                }
+                $html .= '</div><div class="vts-banner__controls" hidden><div class="vts-banner__dots" role="group" aria-label="Choose a slide">';
+                foreach ( $slides as $index => $slide ) {
+                    $html .= '<button type="button" class="vts-banner__dot" aria-label="Show slide ' . ( $index + 1 ) . ': ' . esc_attr( $slide[1] ) . '" aria-controls="vts-banner-slide-' . $index . '" aria-current="' . ( $index === 0 ? 'true' : 'false' ) . '"></button>';
+                }
+                return $html . '</div><button type="button" class="vts-banner__pause" aria-label="Pause slideshow" title="Pause slideshow" data-paused="false"><span class="vts-banner__playback-icon" aria-hidden="true"></span></button></div></section>';
+            }, $content );
             $content = preg_replace_callback( '~<section\b[^>]*>(?:(?!</section>).)*</section>~is', static function ( $match ) {
                 foreach ( array( 'YTD turnover', 'Support capability', 'Delivery reach', 'Founded' ) as $label ) {
                     if ( strpos( $match[0], $label ) === false ) {
@@ -145,7 +177,7 @@ HTML;
 add_action( 'wp_body_open', function () {
     $home = wp_make_link_relative( home_url( '/' ) );
     $logo = wp_make_link_relative( get_template_directory_uri() . '/assets/vayutech-logo.png' );
-    $links = array( 'About' => 'about-us/', 'Products' => 'products/', 'Services' => 'solutions/', 'Contact' => 'contact/' );
+    $links = array( 'About' => '#section-about', 'Products' => 'products/', 'Services' => 'solutions/', 'Contact' => 'contact/' );
     ?>
     <header class="vts-header">
         <div class="vts-header__row">
