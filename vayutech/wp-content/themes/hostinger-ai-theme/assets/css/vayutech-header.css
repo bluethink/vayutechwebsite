@@ -1,0 +1,50 @@
+/* Shared VTS palette, sampled from the supplied logo. */
+:root{--display:Arial,sans-serif;--vts-brand:#ba4517;--vts-brand-hover:#983812;--vts-brand-light:#f29b79;--vts-brand-soft:#f8eee9}
+body{--wp--preset--color--color3:var(--vts-brand);--wp--preset--color--color-3:var(--vts-brand);--wp--preset--color--primary:var(--vts-brand);--wp--preset--color--color1:var(--vts-brand-soft);--wp--preset--color--color-1:var(--vts-brand-soft);--wp--preset--gradient--gradient-one:linear-gradient(135deg,var(--vts-brand-soft),#efd0c3)}
+.wp-site-blocks .wp-element-button,.wp-site-blocks .wp-block-button__link{background-color:var(--vts-brand);color:#fff}
+.wp-site-blocks .wp-element-button:hover,.wp-site-blocks .wp-block-button__link:hover{background-color:var(--vts-brand-hover)}
+.wp-site-blocks :focus-visible{outline:2px solid var(--vts-brand);outline-offset:3px}
+.wp-site-blocks input[type=checkbox],.wp-site-blocks input[type=radio]{accent-color:var(--vts-brand)}
+.vts-header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid #e9e7e5;color:#202020;font-family:Arial,sans-serif}
+body.admin-bar .vts-header{top:32px}
+@media(max-width:782px){body.admin-bar .vts-header{top:46px}}
+/* The mobile WordPress toolbar scrolls away instead of remaining fixed. */
+@media(max-width:600px){body.admin-bar .vts-header{top:0}}
+.vts-header *{box-sizing:border-box}
+.vts-header a{text-decoration:none;color:inherit}
+.vts-header__row{max-width:1680px;margin:0 auto;min-height:112px;padding:18px clamp(20px,3vw,56px);display:flex;align-items:center;gap:clamp(18px,2vw,36px)}
+.vts-brand{flex:0 0 180px;line-height:0}
+.vts-brand img{display:block;width:180px;height:auto}
+.vts-nav{display:flex;align-items:center;justify-content:center;gap:clamp(18px,2vw,34px);flex:1;white-space:nowrap}
+.vts-header .vts-nav a,.vts-header .vts-mobile-menu nav>a{display:flex;align-items:center;font-family:var(--display);font-size:15px;font-weight:500;color:rgb(42,42,42);letter-spacing:-0.01em;gap:6px;padding:12px 0}
+.vts-header .vts-nav a:hover,.vts-header .vts-mobile-menu nav>a:hover,.vts-email:hover{color:var(--vts-brand)}
+.vts-search{display:flex;align-items:center;flex:0 1 230px;min-width:170px;border-radius:40px;background:#f5f5f7;padding:8px 14px;margin:0}
+.vts-search input{width:100%;min-width:0;background:transparent;border:0;padding:9px 5px;font:15px Arial,sans-serif;color:#202020}
+.vts-search button{display:flex;align-items:center;background:transparent;border:0;padding:8px;color:#777;cursor:pointer}
+.vts-header svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.vts-contact{display:flex;flex-direction:column;gap:7px;white-space:nowrap}
+.vts-phone{display:flex;align-items:center;gap:9px;font-size:17px;font-weight:700}
+.vts-phone svg{color:var(--vts-brand)}
+.vts-email{font-size:12px;color:#666!important}
+.vts-header .vts-quote{background:var(--vts-brand);color:#fff;border-radius:61px;padding:18px 23px;font-size:15px;font-weight:700;white-space:nowrap;transition:background .15s}
+.vts-header .vts-quote:hover{background:var(--vts-brand-hover)}
+.vts-header :focus-visible{outline:3px solid var(--vts-brand);outline-offset:4px}
+.vts-mobile-menu{display:none}
+@media(max-width:1250px){.vts-search{display:none}.vts-header__row{gap:24px}.vts-nav{gap:22px}}
+@media(max-width:960px){
+ .vts-header__row{min-height:88px;padding:12px 20px;gap:16px}
+ .vts-brand{flex-basis:140px;margin-right:auto}.vts-brand img{width:140px}
+ .vts-nav,.vts-contact{display:none}
+ .vts-header .vts-quote{padding:14px 17px}
+ .vts-mobile-menu{display:block}
+ .vts-mobile-menu summary{width:44px;height:44px;padding:12px 10px;cursor:pointer;list-style:none;display:flex;flex-direction:column;justify-content:space-between}
+ .vts-mobile-menu summary::-webkit-details-marker{display:none}
+ .vts-mobile-menu summary span{height:2px;background:#202020;width:24px}
+ .vts-mobile-menu nav{position:absolute;left:0;right:0;top:100%;background:#fff;border-top:1px solid #eee;box-shadow:0 12px 20px #00000012;padding:16px 24px 24px;display:flex;flex-direction:column;gap:4px;max-height:75vh;overflow-y:auto}
+ .vts-mobile-menu nav>a{padding:12px 0}
+ .vts-mobile-menu form{display:flex;gap:8px;margin:12px 0}
+ .vts-mobile-menu input{min-width:0;flex:1;border:1px solid #ddd;border-radius:8px;padding:12px;font:16px Arial,sans-serif}
+ .vts-mobile-menu button{border:0;border-radius:8px;background:var(--vts-brand);color:#fff;padding:12px;font-weight:600}
+ .vts-mobile-email{overflow-wrap:anywhere}
+}
+@media(max-width:380px){.vts-header__row{padding:12px;gap:8px}.vts-brand{flex-basis:112px}.vts-brand img{width:112px}.vts-header .vts-quote{padding:13px 12px}}
